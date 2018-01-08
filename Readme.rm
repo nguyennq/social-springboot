@@ -1,0 +1,29 @@
+Build base on Booke Learn Microservices with SprintBoot
+Main Story:
+A. Story 1: As a user of the application, I want to be presented with a random multiplication that I can solve online—not too easy,
+so I can use mental calculation and make my brain work every day.
+To make this work, we’ll split the user story into several sub-tasks:
+1. Create a basic service with the business logic.
+2. Create a basic API endpoint to access this service (REST API).
+3. Create a basic web page to ask the users to solve that calculation.
+
+B. Given our requirements, we can identify the following business objects:
+   • Multiplication: Contains the factors of the operation.
+   • User: Identi es the user who will try to solve a Multiplication.
+   • MultiplicationResultAttempt: Contains a reference to the Multiplication and a reference to the User,
+    together with the value submitted (the attempt to solve the operation) and the actual result.
+
+The Business Logic Layer
+Once you have the domain model defined, it’s time think about the other part of the business logic: the application services.
+Having a look at our requirements, we need:
+• Some functionality to check if an attempt is correct or not
+• A way of generating a mid-complexity multiplication
+REST API
+What are the interfaces that we want to expose for this application? We can get them from the requirements:
+• We want users to solve a multiplication so we want to read a random,
+medium complexity multiplication as consumers of the REST API.
+• In order to solve the multiplication, we want to send a result for a given multiplication,
+and because we want to know who is solving it,
+we want to send it together with the user’s alias.
+B. Story 2:
+as a user of the application, i want it to show me my last attempts, so i can see how good or bad i’m doing over time.
