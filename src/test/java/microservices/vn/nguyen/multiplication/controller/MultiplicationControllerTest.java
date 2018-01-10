@@ -1,7 +1,7 @@
 package microservices.vn.nguyen.multiplication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import microservices.vn.nguyen.multiplication.domain.Multiplication;
+import microservices.vn.nguyen.multiplication.entity.Multiplication;
 import microservices.vn.nguyen.multiplication.service.MultiplicationService;
 import org.junit.Before;
 import org.junit.Test;

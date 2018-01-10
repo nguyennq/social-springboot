@@ -1,6 +1,6 @@
 package microservices.vn.nguyen.multiplication.controller;
 
-import microservices.vn.nguyen.multiplication.domain.Multiplication;
+import microservices.vn.nguyen.multiplication.entity.Multiplication;
 import microservices.vn.nguyen.multiplication.service.MultiplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

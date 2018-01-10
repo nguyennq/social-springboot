@@ -27,3 +27,9 @@ and because we want to know who is solving it,
 we want to send it together with the user’s alias.
 B. Story 2:
 as a user of the application, i want it to show me my last attempts, so i can see how good or bad i’m doing over time.
+Let’s try to summarize what our refactoring task should include:
+1. The attempt (MultiplicationResultAttempt) should include a boolean to indicate if it’s correct or not.
+We’ll store it and later we’ll be able to query the database.
+2.  The service (MultiplicationServiceImpl) should not only return the result calculated “on the  y” but save it in the attempt too.
+3.  The client shouldn’t be able to  ag an attempt as correct, so this  eld should not be read from the REST API but instead calculated internally.
+4. The tests need to be changed to reflect our new circumstances.

@@ -1,6 +1,6 @@
 package microservices.vn.nguyen.multiplication.service;
 
-import microservices.vn.nguyen.multiplication.domain.Multiplication;
+import microservices.vn.nguyen.multiplication.entity.Multiplication;
 import microservices.vn.nguyen.multiplication.domain.MultiplicationNoLombok;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -3,11 +3,13 @@ package microservices.vn.nguyen.multiplication.controller;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import microservices.vn.nguyen.multiplication.domain.MultiplicationResultAttempt;
+import microservices.vn.nguyen.multiplication.entity.MultiplicationResultAttempt;
 import microservices.vn.nguyen.multiplication.service.MultiplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by nals on 1/5/18.
@@ -24,8 +26,11 @@ public final class MultiplicationResultAttemptController {
 
     //TODO Implement POST Services
     @PostMapping
-    public ResponseEntity<ResultResponse> postResultAttempt(@RequestBody MultiplicationResultAttempt multiplicationResultAttempt){
-        return ResponseEntity.ok(new ResultResponse(multiplicationService.checkAttempt(multiplicationResultAttempt)));
+    public ResponseEntity<MultiplicationResultAttempt> postResultAttempt(@RequestBody MultiplicationResultAttempt multiplicationResultAttempt){
+        boolean isCorrect = multiplicationService.checkAttempt(multiplicationResultAttempt);
+        MultiplicationResultAttempt resultAttemptCopy = new MultiplicationResultAttempt(multiplicationResultAttempt.getUser(),
+                multiplicationResultAttempt.getMultiplication(),multiplicationResultAttempt.getResultAttempt(),isCorrect);
+        return ResponseEntity.ok(resultAttemptCopy);
     }
 
     @RequiredArgsConstructor
@@ -35,4 +40,8 @@ public final class MultiplicationResultAttemptController {
         private final boolean correctAnswer;
     }
 
+    @GetMapping
+    public ResponseEntity<List<MultiplicationResultAttempt>> getStatistics(@RequestParam("alias") String alias){
+        return ResponseEntity.ok(multiplicationService.getStatisticsForUser(alias));
+    }
 }
