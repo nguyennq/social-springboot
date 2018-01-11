@@ -33,3 +33,7 @@ We’ll store it and later we’ll be able to query the database.
 2.  The service (MultiplicationServiceImpl) should not only return the result calculated “on the  y” but save it in the attempt too.
 3.  The client shouldn’t be able to  ag an attempt as correct, so this  eld should not be read from the REST API but instead calculated internally.
 4. The tests need to be changed to reflect our new circumstances.
+C. User Story 3:
+as a user of the application, i want to be more motivated to participate every day, so i don’t give up easily.
+The same means: Note that this one can be also written from another perspective: “As the administrator of the application,
+ I want users to come back every day so I can later monetize the recurrent visits.”

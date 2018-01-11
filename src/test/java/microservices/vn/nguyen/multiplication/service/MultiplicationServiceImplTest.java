@@ -3,8 +3,8 @@ package microservices.vn.nguyen.multiplication.service;
 import microservices.vn.nguyen.multiplication.entity.Multiplication;
 import microservices.vn.nguyen.multiplication.entity.MultiplicationResultAttempt;
 import microservices.vn.nguyen.multiplication.entity.User;
-
-import microservices.vn.nguyen.multiplication.repository.MultiplicationRepository;
+import microservices.vn.nguyen.multiplication.event.EventDispatcher;
+import microservices.vn.nguyen.multiplication.event.MultiplicationSolvedEvent;
 import microservices.vn.nguyen.multiplication.repository.MultiplicationResultAttemptRepository;
 import microservices.vn.nguyen.multiplication.repository.UserRepository;
 import org.assertj.core.util.Lists;
@@ -13,12 +13,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -34,12 +34,17 @@ public class MultiplicationServiceImplTest {
     private MultiplicationResultAttemptRepository multiplicationResultAttemptRepository;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private EventDispatcher eventDispatcher;
 
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        multiplicationServiceImpl = new MultiplicationServiceImpl(randomGeneratorService,multiplicationResultAttemptRepository,userRepository);
+        multiplicationServiceImpl = new MultiplicationServiceImpl(randomGeneratorService,
+                multiplicationResultAttemptRepository,
+                userRepository,
+                eventDispatcher);
     }
 
     @Test
@@ -65,13 +70,19 @@ public class MultiplicationServiceImplTest {
         MultiplicationResultAttempt multiplicationResultAttempt = new MultiplicationResultAttempt(preparedUser(),multiplication,2500, false);
 //        MultiplicationResultAttempt multiplicationResultAttempt = preparedMultiplicationResultAttempt();
         MultiplicationResultAttempt multiplicationResultAfterCheckedAttempt = new MultiplicationResultAttempt(user,multiplication,2500, true);
+        MultiplicationSolvedEvent multiplicationSolvedEvent = new MultiplicationSolvedEvent(multiplicationResultAttempt.getId(),
+                multiplicationResultAttempt.getUser().getId(),true);
+
         given(userRepository.findByAlias("john conner")).willReturn(Optional.empty());
+
         //when
         boolean attemptResult = multiplicationServiceImpl.checkAttempt(multiplicationResultAttempt);
         //then
         assertThat(attemptResult).isTrue();
         verify(multiplicationResultAttemptRepository).save(multiplicationResultAfterCheckedAttempt);
+        verify(eventDispatcher).send(eq(multiplicationSolvedEvent));
     }
+
 
     @Test
     public void checkAttempt_ShouldReturnFalseWhenInputNotCorrectInfo() throws Exception {
@@ -80,11 +91,15 @@ public class MultiplicationServiceImplTest {
         User user = preparedUser();
         MultiplicationResultAttempt multiplicationResultAttempt = new MultiplicationResultAttempt(preparedUser(),multiplication,2000,false);
         given(userRepository.findByAlias("john conner")).willReturn(Optional.empty());
+        MultiplicationSolvedEvent multiplicationSolvedEvent = new MultiplicationSolvedEvent(multiplicationResultAttempt.getId(),
+                multiplicationResultAttempt.getUser().getId(),false);
+
         //when
         boolean attemptResult = multiplicationServiceImpl.checkAttempt(multiplicationResultAttempt);
         //then
         assertThat(attemptResult).isFalse();
         verify(multiplicationResultAttemptRepository).save(multiplicationResultAttempt);
+        verify(eventDispatcher).send(eq(multiplicationSolvedEvent));
     }
 
     @Test
